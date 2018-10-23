@@ -1,0 +1,32 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:ns="http://schemas.datacontract.org/2004/07/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:rankingProducto>
+         <!--Optional:-->
+         <tem:value>
+            <!--Optional:-->
+            <ns:Id>?</ns:Id>
+            <!--Optional:-->
+            <ns:ciudadEspectaculo>?</ns:ciudadEspectaculo>
+            <!--Optional:-->
+            <ns:descripcionEspectaculo>?</ns:descripcionEspectaculo>
+            <!--Optional:-->
+            <ns:espectaculo>?</ns:espectaculo>
+            <!--Optional:-->
+            <ns:fechaEspectaculo>?</ns:fechaEspectaculo>
+            <!--Optional:-->
+            <ns:fechaLlegada>?</ns:fechaLlegada>
+            <!--Optional:-->
+            <ns:fechaSalida>?</ns:fechaSalida>
+            <!--Optional:-->
+            <ns:pathImagen>?</ns:pathImagen>
+            <!--Optional:-->
+            <ns:tipoEspectaculo>?</ns:tipoEspectaculo>
+            <!--Optional:-->
+            <ns:tipoHospedaje>?</ns:tipoHospedaje>
+            <!--Optional:-->
+            <ns:tipoTransporte>?</ns:tipoTransporte>
+         </tem:value>
+      </tem:rankingProducto>
+   </soapenv:Body>
+</soapenv:Envelope>

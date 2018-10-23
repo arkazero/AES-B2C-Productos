@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014-2017, Red Hat, Inc. and/or its affiliates, and individual 
+	contributors by the @authors tag. Licensed under the Apache License, Version 
+	2.0 (the "License"); you may not use this file except in compliance with 
+	the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!-- Configures the Camel Context -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="           http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd           http://camel.apache.org/schema/spring    http://camel.apache.org/schema/spring/camel-spring.xsd   http://camel.apache.org/schema/cxf    http://camel.apache.org/schema/cxf/camel-cxf.xsd        http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd   ">
+    <import resource="properties-beans.xml"/>
+    <!-- EndPoint Rest conf -->
+    <cxf:rsServer address="${cxf.server}/Productos" id="rsServer" serviceClass="com.productos.rs.RSProductosImpl">
+        <cxf:extensionMappings>
+            <entry key="json" value="application/json"/>
+        </cxf:extensionMappings>
+        <cxf:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </cxf:providers>
+    </cxf:rsServer>
+    <!-- Logging conf -->
+    <bean class="org.slf4j.LoggerFactory" factory-method="getLogger" id="contableLog">
+        <constructor-arg type="java.lang.String" value="com.productos.rs"/>
+    </bean>
+    <bean class="org.apache.camel.builder.LoggingErrorHandlerBuilder " id="loggingErrorHandler">
+        <property name="logName" value="mylogger.name"/>
+        <property name="level" value="DEBUG"/>
+    </bean>
+    <bean class="com.productos.rs.RSProductosImpl" id="itemServiceBean"/>
+    <camelContext id="_rs_ordenes" trace="false" xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="properties" location="ref:confProps"/>
+        <dataFormats>
+            <json id="jack" library="Jackson"/>
+        </dataFormats>
+        <route id="_route_ordenes" streamCache="true" trace="false">
+            <from id="_from1" uri="cxfrs:bean:rsServer"/>
+            <log id="_log1" message="Body :::: ${body}"/>
+            <log id="_logHeader1" message="Headers :::: ${header.operationName}"/>
+            <log id="_logHeader2" message="HeadersCamel :::: ${headers.CamelHttpPath}"/>
+            
+            <choice id="_choice">
+                <when id="_whenCCJ">
+                    <simple>${header.operationName} == 'listarProductoCodigo'</simple>
+                    <bean id="_bean1" method="listarProductoCodigo" ref="itemServiceBean"/>
+                    <unmarshal id="_unmarshalCCJ">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <log id="_logHeader2" message="Body Codigo  :::: ${body.codigoProducto}"/>
+            		<log id="_logHeader3" message="Body Estado  :::: ${body.estadoProducto}"/>
+            		<log id="_logHeader3" message="Body Mensaje :::: ${body.mensajeEstado}"/>
+
+            		
+                    <to id="_toCCJ-1" uri="direct:listarProductoCodigo"/>
+                </when>
+                <when id="_whenCCJ">
+                    <simple>${header.operationName} == 'listarProductoCodigo'</simple>
+                    <bean id="_bean1" method="listarProductoCodigo" ref="itemServiceBean"/>
+                    <unmarshal id="_unmarshalCCJ">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <log id="_logHeader2" message="Body Codigo  :::: ${body.codigoProducto}"/>
+            		<log id="_logHeader3" message="Body Estado  :::: ${body.estadoProducto}"/>
+            		<log id="_logHeader3" message="Body Mensaje :::: ${body.mensajeEstado}"/>
+
+            		
+                    <to id="_toCCJ-1" uri="direct:listarProductoCodigo"/>
+                </when>
+            </choice>
+        </route>
+        <route id="_route_listar">
+            <from id="_from_listar" uri="direct:listarProductoCodigo"/>
+            <log id="_logBodyBI" message="Body :::: ${body.codigoProducto}"/>
+            
+            <setHeader headerName="req" id="_setHeader5">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeader6">
+                <simple>templates/listarProductoCodigo.vm</simple>
+            </setHeader>
+            <to id="_to2BI" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3BI" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeaders1" pattern="CamelHttp*"/>
+            <removeHeaders id="_removeHeaders2" pattern="req"/>
+            <setHeader headerName="CamelHttpMethod">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeader12">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>   
+            <setHeader headerName="Content-Type" id="_setHeader10">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAP">
+                <constant>http://tempuri.org/Ib2c/listarProductoCodigo</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeader8">
+                <constant>listarProductoCodigo</constant>
+            </setHeader>
+            <to id="_to4BI" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=true"/>       
+			<log id="_logFinalBI"  message="::: Request VM: ${body}"/>
+			
+        </route>
+    </camelContext>
+</beans>

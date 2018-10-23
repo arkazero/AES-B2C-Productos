@@ -1,0 +1,14 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:ns="http://schemas.datacontract.org/2004/07/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:listarProductoDescripcion>
+         <!--Optional:-->
+         <tem:ObjProResultado>
+            <!--Optional:-->
+            <ns:CodigoProducto>?</ns:CodigoProducto>
+            <!--Optional:-->
+            <ns:NombreProducto>?</ns:NombreProducto>
+         </tem:ObjProResultado>
+      </tem:listarProductoDescripcion>
+   </soapenv:Body>
+</soapenv:Envelope>

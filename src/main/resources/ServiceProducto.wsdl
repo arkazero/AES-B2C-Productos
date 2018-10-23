@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="FacadeProducto"
+	targetNamespace="http://tempuri.org/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+	xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://tempuri.org/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://tempuri.org/Imports">
+			<xsd:import
+				schemaLocation="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?xsd=xsd0"
+				namespace="http://tempuri.org/" />
+			<xsd:import
+				schemaLocation="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?xsd=xsd1"
+				namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+			<xsd:import
+				schemaLocation="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?xsd=xsd2"
+				namespace="http://schemas.datacontract.org/2004/07/" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="Ib2c_modificarProducto_InputMessage">
+		<wsdl:part name="parameters" element="tns:modificarProducto" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_modificarProducto_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:modificarProductoResponse" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_crearProducto_InputMessage">
+		<wsdl:part name="parameters" element="tns:crearProducto" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_crearProducto_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:crearProductoResponse" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_eliminarProducto_InputMessage">
+		<wsdl:part name="parameters" element="tns:eliminarProducto" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_eliminarProducto_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:eliminarProductoResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoCodigo_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoCodigo" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoCodigo_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoCodigoResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoNombre_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoNombre" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoNombre_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoNombreResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoDescripcion_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoDescripcion" />
+	</wsdl:message>
+	<wsdl:message
+		name="Ib2c_listarProductoDescripcion_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:listarProductoDescripcionResponse" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_rankingProducto_InputMessage">
+		<wsdl:part name="parameters" element="tns:rankingProducto" />
+	</wsdl:message>
+	<wsdl:message name="Ib2c_rankingProducto_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:rankingProductoResponse" />
+	</wsdl:message>
+	<wsdl:portType name="Ib2c">
+		<wsdl:operation name="modificarProducto">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/modificarProducto"
+				message="tns:Ib2c_modificarProducto_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/modificarProductoResponse"
+				message="tns:Ib2c_modificarProducto_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="crearProducto">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/crearProducto"
+				message="tns:Ib2c_crearProducto_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/crearProductoResponse"
+				message="tns:Ib2c_crearProducto_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="eliminarProducto">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/eliminarProducto"
+				message="tns:Ib2c_eliminarProducto_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/eliminarProductoResponse"
+				message="tns:Ib2c_eliminarProducto_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoCodigo">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoCodigo"
+				message="tns:Ib2c_listarProductoCodigo_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoCodigoResponse"
+				message="tns:Ib2c_listarProductoCodigo_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoNombre">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoNombre"
+				message="tns:Ib2c_listarProductoNombre_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoNombreResponse"
+				message="tns:Ib2c_listarProductoNombre_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoDescripcion">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoDescripcion"
+				message="tns:Ib2c_listarProductoDescripcion_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/listarProductoDescripcionResponse"
+				message="tns:Ib2c_listarProductoDescripcion_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="rankingProducto">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/Ib2c/rankingProducto"
+				message="tns:Ib2c_rankingProducto_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/Ib2c/rankingProductoResponse"
+				message="tns:Ib2c_rankingProducto_OutputMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_Ib2c" type="tns:Ib2c">
+		<soap:binding
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="modificarProducto">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/modificarProducto"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="crearProducto">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/crearProducto" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="eliminarProducto">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/eliminarProducto"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoCodigo">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/listarProductoCodigo"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoNombre">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/listarProductoNombre"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="listarProductoDescripcion">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/listarProductoDescripcion"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="rankingProducto">
+			<soap:operation
+				soapAction="http://tempuri.org/Ib2c/rankingProducto"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FacadeProducto">
+		<wsdl:port name="BasicHttpBinding_Ib2c"
+			binding="tns:BasicHttpBinding_Ib2c">
+			<soap:address
+				location="http://40.87.0.169/ServicioProductos/ServiceProducto.svc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
