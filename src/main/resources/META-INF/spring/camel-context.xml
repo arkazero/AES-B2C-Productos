@@ -56,17 +56,31 @@
                     <to id="_toCCJ-1" uri="direct:listarProductoCodigo"/>
                 </when>
                 <when id="_whenCCJ">
-                    <simple>${header.operationName} == 'listarProductoCodigo'</simple>
-                    <bean id="_bean1" method="listarProductoCodigo" ref="itemServiceBean"/>
-                    <unmarshal id="_unmarshalCCJ">
+                    <simple>${header.operationName} == 'listarProductoDescripcion'</simple>
+                    <bean id="_bean1" method="listarProductoDescripcion" ref="itemServiceBean"/>
+                    <unmarshal id="_unmarshalLPD">
                         <jaxb contextPath="com.dto" prettyPrint="true"/>
                     </unmarshal>
-                    <log id="_logHeader2" message="Body Codigo  :::: ${body.codigoProducto}"/>
-            		<log id="_logHeader3" message="Body Estado  :::: ${body.estadoProducto}"/>
-            		<log id="_logHeader3" message="Body Mensaje :::: ${body.mensajeEstado}"/>
+                    <log id="_logHeader2LPD" message="Body Codigo  :::: ${body.codigoProducto}"/>
+            		<log id="_logHeader3LPD" message="Body Estado  :::: ${body.estadoProducto}"/>
+            		<log id="_logHeader3LPD" message="Body Mensaje :::: ${body.mensajeEstado}"/>
 
             		
-                    <to id="_toCCJ-1" uri="direct:listarProductoCodigo"/>
+                    <to id="_toLPD" uri="direct:listarProductoDescripcion"/>
+                </when>
+                
+                <when id="_whenCCJ">
+                    <simple>${header.operationName} == 'listarProductoNombre'</simple>
+                    <bean id="_bean1" method="listarProductoNombre" ref="itemServiceBean"/>
+                    <unmarshal id="_unmarshalLPN">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <log id="_logHeader2LPN" message="Body Codigo  :::: ${body.codigoProducto}"/>
+            		<log id="_logHeader3LPN" message="Body Estado  :::: ${body.estadoProducto}"/>
+            		<log id="_logHeader3LPN" message="Body Mensaje :::: ${body.mensajeEstado}"/>
+
+            		
+                    <to id="_toLPN" uri="direct:listarProductoNombre"/>
                 </when>
             </choice>
         </route>
@@ -92,7 +106,14 @@
 			</setHeader>  
 			<setHeader headerName="Host" id="_setHeader12">
                 <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeader12">
+                <constant>gzip,deflate</constant>
             </setHeader>   
+            
+            
+            
             <setHeader headerName="Content-Type" id="_setHeader10">
                 <constant>text/xml;charset=UTF-8</constant>
             </setHeader>  
@@ -104,6 +125,43 @@
             </setHeader>
             <to id="_to4BI" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=true"/>       
 			<log id="_logFinalBI"  message="::: Request VM: ${body}"/>
+			
+        </route>
+        
+        <route id="_route_listar_descripcion">
+            <from id="_from_listarLD" uri="direct:listarProductoDescripcion"/>
+            <log id="_logBodyLD" message="Body :::: ${body.codigoProducto}"/>
+            
+            <setHeader headerName="req" id="_setHeaderLD5">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeaderLD6">
+                <simple>templates/listarProductoCodigo.vm</simple>
+            </setHeader>
+            <to id="_to2LD" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_logLD3" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeadersLD1" pattern="CamelHttp*"/>
+            <removeHeaders id="_removeHeadersLD2" pattern="req"/>
+            <setHeader headerName="CamelHttpMethod">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeaderLD12">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>   
+            <setHeader headerName="Content-Type" id="_setHeaderLD10">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPLD">
+                <constant>http://tempuri.org/Ib2c/listarProductoCodigo</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeaderLD8">
+                <constant>listarProductoDescripcion</constant>
+            </setHeader>
+            <to id="_to4LD" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=true"/>       
+			<log id="_logFinalLD"  message="::: Request VM: ${body}"/>
 			
         </route>
     </camelContext>

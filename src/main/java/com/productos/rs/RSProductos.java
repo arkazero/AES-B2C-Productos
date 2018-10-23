@@ -33,7 +33,7 @@ public interface RSProductos {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)	
 	@Produces(MediaType.APPLICATION_JSON)	
-	@Path("/listarProductoDescripcion/{codigo}/{nombre}")
+	@Path("/listarProductoNombre/{codigo}/{nombre}")
 	public ProductoRS listarProductoNombre (@Context UriInfo uri);
 
 }
