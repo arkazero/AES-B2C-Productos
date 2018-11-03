@@ -2,8 +2,9 @@ package com.productos.rs;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
-
 import com.dto.ProductoRS;
+import com.dto.Productos;
+
 
 
 
@@ -15,12 +16,10 @@ public class RSProductosImpl implements RSProductos {
 		
 		MultivaluedMap<String, ?> paramMap = uri.getPathParameters();
 		String id = (String) paramMap.getFirst("id");
-		String estado = (String) paramMap.getFirst("estado");
-	    String descripcion = (String) paramMap.getFirst("descripcion");
+		
 	    
-		responsePro.setEstadoProducto(Integer.parseInt(estado));
+		
 		responsePro.setCodigoProducto(Integer.parseInt(id));				
-		responsePro.setMensajeEstado(descripcion);
 		
 		return responsePro;
 		
@@ -32,10 +31,8 @@ public class RSProductosImpl implements RSProductos {
 		ProductoRS responsePro = new ProductoRS();
 		
 		MultivaluedMap<String, ?> paramMap = uri.getPathParameters();
-		String id = (String) paramMap.getFirst("codigo");
 		String nombre = (String) paramMap.getFirst("nombre");
 	    
-		responsePro.setCodigoProducto(Integer.parseInt(id));
 		responsePro.setNombreProducto(nombre);
 		
 		return responsePro;
@@ -47,13 +44,43 @@ public class RSProductosImpl implements RSProductos {
 		
 
 		MultivaluedMap<String, ?> paramMap = uri.getPathParameters();
-		String id = (String) paramMap.getFirst("codigo");
 		String nombre = (String) paramMap.getFirst("nombre");
 	    
-		responsePro.setCodigoProducto(Integer.parseInt(id));
 		responsePro.setNombreProducto(nombre);
 		
 		return responsePro;
 	}
 
+	@Override
+	public Productos crearProductoNuevo(Productos productoNuevo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProductoRS eliminarProductoCodigo(UriInfo uri) {
+		
+		ProductoRS responsePro = new ProductoRS();
+		
+		MultivaluedMap<String, ?> paramMap = uri.getPathParameters();
+		String id = (String) paramMap.getFirst("id");
+				
+		responsePro.setCodigoProducto(Integer.parseInt(id));				
+		
+		return responsePro;
+	}
+
+	@Override
+	public Boolean rankingProducto() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Productos modificarProducto(Productos productoMod) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

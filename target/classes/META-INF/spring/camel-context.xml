@@ -35,11 +35,16 @@
         <dataFormats>
             <json id="jack" library="Jackson"/>
         </dataFormats>
-        <route id="_route_ordenes" streamCache="true" trace="false">
-            <from id="_from1" uri="cxfrs:bean:rsServer"/>
+        <route id="_route_ordenes" streamCache="true" trace="false"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from1" uri="cxfrs:bean:rsServer?bindingStyle=SimpleConsumer"/>
+            <setHeader headerName="reqBody" id="_setHeaderNomHeader">
+                <simple>${body}</simple>
+            </setHeader>
             <log id="_log1" message="Body :::: ${body}"/>
             <log id="_logHeader1" message="Headers :::: ${header.operationName}"/>
             <log id="_logHeader2" message="HeadersCamel :::: ${headers.CamelHttpPath}"/>
+            <log id="_logHeader3"  message="::: headersCompleto: ${headers.CamelHttp}"/> 
             
             <choice id="_choice">
                 <when id="_whenCCJ">
@@ -82,9 +87,277 @@
             		
                     <to id="_toLPN" uri="direct:listarProductoNombre"/>
                 </when>
+   				
+  				<when id="_whenMP">
+                    <simple>${header.operationName} == 'modificarProducto'</simple>
+                    <bean id="_bean1MP" method="modificarProducto" ref="itemServiceBean"/>
+                    <setBody>
+                    	<simple>${header.reqBody}</simple>
+                    </setBody>
+                    
+                    <unmarshal id="_unmarshalLMP">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <to id="_toMP" uri="direct:modificarProducto"/>
+                </when>
+   				
+   				             
+                <when id="_whenDP">
+                    <simple>${header.operationName} == 'eliminarProductoCodigo'</simple>
+                    <bean id="_bean1DP" method="eliminarProductoCodigo" ref="itemServiceBean"/>
+                    <unmarshal id="_unmarshalLDP">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <log id="_logHeader2DP" message="Body Codigo eliminarProducto  :::: ${body.codigoProducto}"/>
+            		<log id="_logHeader3DP" message="Body Estado  :::: ${body.estadoProducto}"/>
+            		<log id="_logHeader3DP" message="Body Mensaje :::: ${body.mensajeEstado}"/>
+
+            		
+                    <to id="_toLDP" uri="direct:eliminarProducto"/>
+                </when>
+                
+                <when id="_whenRK">
+                    <simple>${header.operationName} == 'rankingProducto'</simple>
+                    <bean id="_bean1RK" method="rankingProducto" ref="itemServiceBean"/>
+                    <to id="_toLDP" uri="direct:rankingProducto"/>
+                </when>
+                
+                <when id="_whenCP">
+                    <simple>${header.operationName} == 'crearProductoNuevo'</simple>
+                    <log id="_logHeaderCP" message="Headers crearProductoNuevo:::: ${header.operationName}"/>
+                    <log id="_logHeader2CP" message="Body Codigo  :::: ${body}"/>
+                    <log id="_logHeaderBodyCP" message="Header Body  :::: ${header.reqBody}"/>
+                    <setBody>
+                    	<simple>${header.reqBody}</simple>
+                    </setBody>
+                    <unmarshal id="_unmarshalLPN">
+                        <jaxb contextPath="com.dto" prettyPrint="true"/>
+                    </unmarshal>
+                    <log id="_logHeader2LPN" message="Body espectaculo  :::: ${body}"/>
+            		
+                    <to id="_toLPN" uri="direct:crearProductoNuevo"/>
+                </when>
+                
             </choice>
         </route>
-        <route id="_route_listar">
+        
+        <route id="_route_modificar"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from_listar" uri="direct:modificarProducto"/>
+            
+            <setHeader headerName="req" id="_setHeader5MP">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeader6MP">
+                <simple>templates/modificarProducto.vm</simple>
+            </setHeader>
+            <to id="_to2MP" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3MP" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeaders1MP" pattern="*"/>
+            <removeHeaders id="_removeHeaders2MP" pattern="req"/>
+            <setHeader headerName="Method">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeader12MP">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeaderMP">
+                <constant>gzip,deflate</constant>
+            </setHeader>   
+            
+            <setHeader headerName="Content-Type" id="_setHeaderMP">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPMP">
+                <constant>http://tempuri.org/Ib2c/modificarProducto</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeaderMP">
+                <constant>modificarProducto</constant>
+            </setHeader>
+            <to id="_to4MP" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinalMP"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyMP">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalMP"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalMP">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toDelFinalMP" uri="mock:endRoute"/>  
+				
+        </route>
+        
+        <route id="_route_ranking"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from_listar" uri="direct:rankingProducto"/>
+            
+            <setHeader headerName="req" id="_setHeader5DRK">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeader6RK">
+                <simple>templates/rankingProducto.vm</simple>
+            </setHeader>
+            <to id="_to2RK" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3RK" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeaders1RK" pattern="*"/>
+            <removeHeaders id="_removeHeaders2rk" pattern="req"/>
+            <setHeader headerName="Method">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeader12rk">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeaderRK">
+                <constant>gzip,deflate</constant>
+            </setHeader>   
+            
+            <setHeader headerName="Content-Type" id="_setHeaderRK">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPRK">
+                <constant>http://tempuri.org/Ib2c/rankingProducto</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeaderRK">
+                <constant>rankingProducto</constant>
+            </setHeader>
+            <to id="_to4RK" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinalRK"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyRK">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalRK"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalRK">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toDelFinalRK" uri="mock:endRoute"/>  
+				
+        </route>
+        
+        <route id="_route_eliminar"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from_listar" uri="direct:eliminarProducto"/>
+            <log id="_logBodyDel" message="Body :::: ${body.codigoProducto}"/>
+            
+            <setHeader headerName="req" id="_setHeader5Del">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeader6Del">
+                <simple>templates/eliminarProducto.vm</simple>
+            </setHeader>
+            <to id="_to2Del" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3Del" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeaders1Del" pattern="*"/>
+            <removeHeaders id="_removeHeaders2Del" pattern="req"/>
+            <setHeader headerName="Method">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeader12Del">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeader12Del">
+                <constant>gzip,deflate</constant>
+            </setHeader>   
+            
+            <setHeader headerName="Content-Type" id="_setHeader10Del">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPDel">
+                <constant>http://tempuri.org/Ib2c/eliminarProducto</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeader8Del">
+                <constant>eliminarProducto</constant>
+            </setHeader>
+            <to id="_to4Del" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinal2Del"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyNDel">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalDel"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalDel">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toDelFinal" uri="mock:endRoute"/>  
+				
+        </route>
+        
+        
+        <route id="_route_crear"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from_listar" uri="direct:crearProductoNuevo"/>
+            
+            <setHeader headerName="req" id="_setHeaderCR5">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeaderCR6">
+                <simple>templates/crearProducto.vm</simple>
+            </setHeader>
+            <to id="_to2CR" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3CR" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeadersCR1" pattern="CamelHttp*"/>
+            <removeHeaders id="_removeHeadersCR2" pattern="*"/>
+            <removeHeader id="_reoperationName" headerName="operationName"/>
+            
+            <setHeader headerName="CamelHttpMethod">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeaderCR12">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>
+            <setHeader headerName="Accept-Encoding" id="_setHeaderCR122">
+                <constant>gzip,deflate</constant>
+            </setHeader>   
+            <setHeader headerName="Content-Type" id="_setHeaderCR10">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPCR">		  	
+                <constant>http://tempuri.org/Ib2c/crearProducto</constant>
+            </setHeader>             
+            <setHeader headerName="operationName" id="_setHeaderCR8">
+                <constant>crearProducto</constant>
+            </setHeader>
+                                  
+            <to id="_to4CR" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinalCR"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyCCJ">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalCCJ2"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalCCJ1">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toCCJ4" uri="mock:endRoute"/>  
+				
+        </route>
+        
+        <route id="_route_listar"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
             <from id="_from_listar" uri="direct:listarProductoCodigo"/>
             <log id="_logBodyBI" message="Body :::: ${body.codigoProducto}"/>
             
@@ -99,9 +372,9 @@
             </to>
             <log id="_log3BI" message="Mensaje en Velocity :::: ${body}"/>
 			
-            <removeHeaders id="_removeHeaders1" pattern="CamelHttp*"/>
+            <removeHeaders id="_removeHeaders1" pattern="*"/>
             <removeHeaders id="_removeHeaders2" pattern="req"/>
-            <setHeader headerName="CamelHttpMethod">
+            <setHeader headerName="Method">
 			    <constant>POST</constant>
 			</setHeader>  
 			<setHeader headerName="Host" id="_setHeader12">
@@ -112,8 +385,6 @@
                 <constant>gzip,deflate</constant>
             </setHeader>   
             
-            
-            
             <setHeader headerName="Content-Type" id="_setHeader10">
                 <constant>text/xml;charset=UTF-8</constant>
             </setHeader>  
@@ -123,12 +394,82 @@
             <setHeader headerName="operationName" id="_setHeader8">
                 <constant>listarProductoCodigo</constant>
             </setHeader>
-            <to id="_to4BI" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=true"/>       
-			<log id="_logFinalBI"  message="::: Request VM: ${body}"/>
+            <to id="_to4BI" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinal2BI"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyNI2">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalCCJ2BI"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalCCJ1NI">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toCCJBI4" uri="mock:endRoute"/>  
+				
 			
         </route>
         
-        <route id="_route_listar_descripcion">
+        <route id="_route_nombre"
+         	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+            <from id="_from_listar" uri="direct:listarProductoNombre"/>
+            <log id="_logBodyNom" message="Body :::: ${body.codigoProducto}"/>
+            
+            <setHeader headerName="req" id="_setHeaderNom5">
+                <simple>${body}</simple>
+            </setHeader>
+            <setHeader headerName="CamelVelocityResourceUri" id="_setHeaderNom6">
+                <simple>templates/listarProductoNombre.vm</simple>
+            </setHeader>
+            <to id="_to2Nom" uri="velocity:dummy?loaderCache=false">
+                <description>Get xml request from template velocity</description>
+            </to>
+            <log id="_log3Nom" message="Mensaje en Velocity :::: ${body}"/>
+			
+            <removeHeaders id="_removeHeadersNom1" pattern="*"/>
+            <removeHeaders id="_removeHeadersNom2" pattern="req"/>
+            <setHeader headerName="Method">
+			    <constant>POST</constant>
+			</setHeader>  
+			<setHeader headerName="Host" id="_setHeaderNom12">
+                <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeaderNom12">
+                <constant>gzip,deflate</constant>
+            </setHeader>   
+            
+            <setHeader headerName="Content-Type" id="_setHeaderNom10">
+                <constant>text/xml;charset=UTF-8</constant>
+            </setHeader>  
+            <setHeader headerName="SOAPAction" id="_setHeaderSOAPNom">
+                <constant>http://tempuri.org/Ib2c/listarProductoNombre</constant>
+            </setHeader> 
+            <setHeader headerName="operationName" id="_setHeaderNom8">
+                <constant>listarProductoNombre</constant>
+            </setHeader>
+            <to id="_to4Nom" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinal2NOM"  message="::: Request VM: ${body}"/>
+			
+			<setBody id="_setBodyNom2">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<log id="_logFinalCCJ2Nom"  message="::: body BK: ${body}"/>
+            <unmarshal id="_unmarshalCCJ1Nom">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toCCJNom4" uri="mock:endRoute"/>  
+			
+        </route>
+        
+        <route id="_route_listar_descripcion"
+        	xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
+        	xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+			xmlns:a="http://schemas.datacontract.org/2004/07/"
+        	>
             <from id="_from_listarLD" uri="direct:listarProductoDescripcion"/>
             <log id="_logBodyLD" message="Body :::: ${body.codigoProducto}"/>
             
@@ -136,33 +477,49 @@
                 <simple>${body}</simple>
             </setHeader>
             <setHeader headerName="CamelVelocityResourceUri" id="_setHeaderLD6">
-                <simple>templates/listarProductoCodigo.vm</simple>
+                <simple>templates/listarProductoDescripcion.vm</simple>
             </setHeader>
             <to id="_to2LD" uri="velocity:dummy?loaderCache=false">
                 <description>Get xml request from template velocity</description>
             </to>
-            <log id="_logLD3" message="Mensaje en Velocity :::: ${body}"/>
+            <log id="_log3LD" message="Mensaje en Velocity :::: ${body}"/>
 			
-            <removeHeaders id="_removeHeadersLD1" pattern="CamelHttp*"/>
+            <removeHeaders id="_removeHeadersLD1" pattern="*"/>
             <removeHeaders id="_removeHeadersLD2" pattern="req"/>
-            <setHeader headerName="CamelHttpMethod">
+            <setHeader headerName="Method">
 			    <constant>POST</constant>
 			</setHeader>  
 			<setHeader headerName="Host" id="_setHeaderLD12">
                 <constant>http://40.87.0.169</constant>
+            </setHeader>
+            
+            <setHeader headerName="Accept-Encoding" id="_setHeaderLD12">
+                <constant>gzip,deflate</constant>
             </setHeader>   
+            
             <setHeader headerName="Content-Type" id="_setHeaderLD10">
                 <constant>text/xml;charset=UTF-8</constant>
             </setHeader>  
             <setHeader headerName="SOAPAction" id="_setHeaderSOAPLD">
-                <constant>http://tempuri.org/Ib2c/listarProductoCodigo</constant>
+                <constant>http://tempuri.org/Ib2c/listarProductoDescripcion</constant>
             </setHeader> 
             <setHeader headerName="operationName" id="_setHeaderLD8">
                 <constant>listarProductoDescripcion</constant>
             </setHeader>
-            <to id="_to4LD" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=true"/>       
-			<log id="_logFinalLD"  message="::: Request VM: ${body}"/>
+            
+            <to id="_to4LD" uri="http://40.87.0.169/ServicioProductos/ServiceProducto.svc?bridgeEndpoint=false"/>       
+			<convertBodyTo type="java.lang.String"/> 
+			<log id="_logFinal2NLD"  message="::: Request VM: ${body}"/>
 			
+			<setBody id="_setBodyLD2">
+                <xpath>/s:Envelope/s:Body/node()</xpath>
+            </setBody>
+           
+          	<unmarshal id="_unmarshalCCJ1LD">
+                <jaxb contextPath="org.tempuri" prettyPrint="true"/>
+            </unmarshal>
+			 <to id="_toCCJLD" uri="mock:endRoute"/>  
+			 
         </route>
     </camelContext>
 </beans>

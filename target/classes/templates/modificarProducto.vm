@@ -4,28 +4,28 @@
       <tem:modificarProducto>
          <!--Optional:-->
          <tem:value>
+           <!--Optional:-->
+            <ns:Id>$!{headers.req.id}</ns:Id>
             <!--Optional:-->
-            <ns:Id>?</ns:Id>
+            <ns:ciudadEspectaculo>$!{headers.req.ciudadEspectaculo}</ns:ciudadEspectaculo>
             <!--Optional:-->
-            <ns:ciudadEspectaculo>?</ns:ciudadEspectaculo>
+            <ns:descripcionEspectaculo>$!{headers.req.descripcionEspectaculo}</ns:descripcionEspectaculo>
             <!--Optional:-->
-            <ns:descripcionEspectaculo>?</ns:descripcionEspectaculo>
+            <ns:espectaculo>$!{headers.req.espectaculo}</ns:espectaculo>
             <!--Optional:-->
-            <ns:espectaculo>?</ns:espectaculo>
+            <ns:fechaEspectaculo>$!{headers.req.fechaEspectaculo}</ns:fechaEspectaculo>
             <!--Optional:-->
-            <ns:fechaEspectaculo>?</ns:fechaEspectaculo>
+            <ns:fechaLlegada>$!{headers.req.fechaLlegada}</ns:fechaLlegada>
             <!--Optional:-->
-            <ns:fechaLlegada>?</ns:fechaLlegada>
+            <ns:fechaSalida>$!{headers.req.fechaSalida}</ns:fechaSalida>
             <!--Optional:-->
-            <ns:fechaSalida>?</ns:fechaSalida>
+            <ns:pathImagen>$!{headers.req.pathImagen}</ns:pathImagen>
             <!--Optional:-->
-            <ns:pathImagen>?</ns:pathImagen>
+            <ns:tipoEspectaculo>$!{headers.req.tipoEspectaculo}</ns:tipoEspectaculo>
             <!--Optional:-->
-            <ns:tipoEspectaculo>?</ns:tipoEspectaculo>
+            <ns:tipoHospedaje>$!{headers.req.tipoHospedaje}</ns:tipoHospedaje>
             <!--Optional:-->
-            <ns:tipoHospedaje>?</ns:tipoHospedaje>
-            <!--Optional:-->
-            <ns:tipoTransporte>?</ns:tipoTransporte>
+            <ns:tipoTransporte>$!{headers.req.tipoTransporte}</ns:tipoTransporte>
          </tem:value>
       </tem:modificarProducto>
    </soapenv:Body>

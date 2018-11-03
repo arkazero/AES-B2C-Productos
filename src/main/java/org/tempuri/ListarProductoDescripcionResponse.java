@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.datacontract.schemas._2004._07.ProductoResultado;
 import org.datacontract.schemas._2004._07.Productos;
 
 
@@ -37,17 +39,17 @@ import org.datacontract.schemas._2004._07.Productos;
 public class ListarProductoDescripcionResponse {
 
     @XmlElementRef(name = "listarProductoDescripcionResult", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<Productos> listarProductoDescripcionResult;
+    protected JAXBElement<ProductoResultado> listarProductoDescripcionResult;
 
     /**
      * Obtiene el valor de la propiedad listarProductoDescripcionResult.
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link Productos }{@code >}
+     *     {@link JAXBElement }{@code <}{@link ProductoResultado }{@code >}
      *     
      */
-    public JAXBElement<Productos> getListarProductoDescripcionResult() {
+    public JAXBElement<ProductoResultado> getListarProductoDescripcionResult() {
         return listarProductoDescripcionResult;
     }
 
@@ -56,10 +58,10 @@ public class ListarProductoDescripcionResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link Productos }{@code >}
+     *     {@link JAXBElement }{@code <}{@link ProductoResultado }{@code >}
      *     
      */
-    public void setListarProductoDescripcionResult(JAXBElement<Productos> value) {
+    public void setListarProductoDescripcionResult(JAXBElement<ProductoResultado> value) {
         this.listarProductoDescripcionResult = value;
     }
 

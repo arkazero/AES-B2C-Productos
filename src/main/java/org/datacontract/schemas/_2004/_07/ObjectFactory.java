@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Productos_QNAME = new QName("http://schemas.datacontract.org/2004/07/", "Productos");
+    private final static QName _Productos_QNAME = new QName("", "Productos");
     private final static QName _ProductoResultado_QNAME = new QName("http://schemas.datacontract.org/2004/07/", "ProductoResultado");
     private final static QName _ProductoError_QNAME = new QName("http://schemas.datacontract.org/2004/07/", "ProductoError");
     private final static QName _ProductoMI_QNAME = new QName("http://schemas.datacontract.org/2004/07/", "ProductoMI");
@@ -101,7 +101,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Productos }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/", name = "Productos")
+    @XmlElementDecl(namespace = "", name = "Productos")
     public JAXBElement<Productos> createProductos(Productos value) {
         return new JAXBElement<Productos>(_Productos_QNAME, Productos.class, null, value);
     }

@@ -5,9 +5,7 @@
          <!--Optional:-->
          <tem:ObjProResultado>
             <!--Optional:-->
-            <ns:CodigoProducto>?</ns:CodigoProducto>
-            <!--Optional:-->
-            <ns:NombreProducto>?</ns:NombreProducto>
+            <ns:NombreProducto>$!{headers.req.nombreProducto}</ns:NombreProducto>
          </tem:ObjProResultado>
       </tem:listarProductoNombre>
    </soapenv:Body>

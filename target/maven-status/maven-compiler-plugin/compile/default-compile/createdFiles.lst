@@ -1,5 +1,6 @@
 org/tempuri/RankingProductoResponse.class
 org/tempuri/RankingProducto.class
+org/tempuri/RankingProductoResponseBK.class
 org/tempuri/package-info.class
 org/datacontract/schemas/_2004/_07/ObjectFactory.class
 org/tempuri/EliminarProducto.class
@@ -28,5 +29,6 @@ org/tempuri/ListarProductoNombre.class
 org/tempuri/ModificarProductoResponse.class
 org/datacontract/schemas/_2004/_07/ProductoResultado.class
 org/tempuri/ObjectFactory.class
+com/dto/Productos.class
 org/tempuri/EliminarProductoResponse.class
 org/tempuri/Ib2C.class

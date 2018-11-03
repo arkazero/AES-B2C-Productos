@@ -261,8 +261,8 @@ public class ObjectFactory {
      * 
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "listarProductoDescripcionResult", scope = ListarProductoDescripcionResponse.class)
-    public JAXBElement<Productos> createListarProductoDescripcionResponseListarProductoDescripcionResult(Productos value) {
-        return new JAXBElement<Productos>(_ListarProductoDescripcionResponseListarProductoDescripcionResult_QNAME, Productos.class, ListarProductoDescripcionResponse.class, value);
+    public JAXBElement<ProductoResultado> createListarProductoDescripcionResponseListarProductoDescripcionResult(ProductoResultado value) {
+        return new JAXBElement<ProductoResultado>(_ListarProductoDescripcionResponseListarProductoDescripcionResult_QNAME, ProductoResultado.class, ListarProductoDescripcionResponse.class, value);
     }
 
     /**
@@ -279,8 +279,8 @@ public class ObjectFactory {
      * 
      */
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "rankingProductoResult", scope = RankingProductoResponse.class)
-    public JAXBElement<Productos> createRankingProductoResponseRankingProductoResult(Productos value) {
-        return new JAXBElement<Productos>(_RankingProductoResponseRankingProductoResult_QNAME, Productos.class, RankingProductoResponse.class, value);
+    public JAXBElement<ProductoResultado> createRankingProductoResponseRankingProductoResult(ProductoResultado value) {
+        return new JAXBElement<ProductoResultado>(_RankingProductoResponseRankingProductoResult_QNAME, ProductoResultado.class, RankingProductoResponse.class, value);
     }
 
 }

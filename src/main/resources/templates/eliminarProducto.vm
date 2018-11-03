@@ -5,11 +5,11 @@
          <!--Optional:-->
          <tem:ObjProResultado>
             <!--Optional:-->
-            <ns:CodigoProducto>?</ns:CodigoProducto>
+            <ns:CodigoProducto>$!{headers.req.codigoProducto}</ns:CodigoProducto>
             <!--Optional:-->
-            <ns:EstadoProducto>?</ns:EstadoProducto>
+            <ns:EstadoProducto>0</ns:EstadoProducto>
             <!--Optional:-->
-            <ns:MensajeEstado>?</ns:MensajeEstado>
+            <ns:MensajeEstado>0</ns:MensajeEstado>
          </tem:ObjProResultado>
       </tem:eliminarProducto>
    </soapenv:Body>
